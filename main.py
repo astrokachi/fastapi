@@ -1,9 +1,19 @@
 from fastapi import FastAPI, HTTPException, Depends
-from models import Message
+import models
+from database import engine, Session
+from sqlalchemy.orm import session
 
 
 app = FastAPI()
+models.Base.metadata.create_all(bind=engine)
 
-@app.get('/')
+
+@app.get("/")
 def root():
-    return { 'message': 'hello world' }
+    return {"message": "hello world"}
+
+
+@app.get("test-async")
+async def read_results():
+    results = await some_api()
+    return results
